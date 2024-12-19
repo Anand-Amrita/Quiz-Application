@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Quizzes</title>
+    <link rel="stylesheet" href="templates\static\css\bootstrap.css">
+    <script src="templates\static\js\bootstrap.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .welcome-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            font-family: 'Georgia', serif;
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        p {
+            font-family: 'Verdana', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        .btn-login {
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            padding: 10px 20px;
+            background: #ffffff;
+            color: #6a11cb;
+            border: none;
+            border-radius: 25px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .btn-login:hover {
+            background: #6a11cb;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-container">
+        <h1>Welcome to Quizzes!</h1>
+        <p>Ready to test your knowledge? Click below to get started!</p>
+        <a href="{% url 'login' %}" class="btn btn-login">Login</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users - Quiz App</title>
+    <link rel="stylesheet" href="templates\static\css\bootstrap.css">
+    <script src="templates\static\js\bootstrap.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --background-color: #f8f9fa;
+            --card-color: #ffffff;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --danger-color: #dc3545;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--background-color);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        /* General form styling */
+        form {
+            margin: 20px 0;
+        }
+
+        form h2 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        /* Input field styling */
+        input[type="text"],
+        input[type="password"],
+        input[type="number"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 15px;
+            margin: 10px 0 20px 0;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s, box-shadow 0.3s;
+            outline: none;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus,
+        input[type="email"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #6c63ff; /* Modern purple border color */
+            box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+        }
+
+        /* Buttons */
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button.btn-primary {
+            background-color: #6c63ff;
+            color: white;
+        }
+
+        button.btn-primary:hover {
+            background-color: #5a54d6;
+            transform: translateY(-2px);
+        }
+
+        button.btn-danger {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        button.btn-danger:hover {
+            background-color: #e05959;
+            transform: translateY(-2px);
+        }
+
+        /* Form labels */
+        label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 250px;
+            background: var(--primary-color);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            z-index: 100;
+            border-right: 1px solid var(--border-color);
+        }
+        .sidebar-header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .nav-links {
+            margin-top: 30px;
+        }
+
+        .nav-links a {
+            display: block;
+            padding: 15px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background:white;
+            color: rgb(2, 3, 80);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .header {
+            background: var(--card-color);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .user-management {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .management-card {
+            background: var(--card-color);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+        display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        /* Form Card */
+        .form-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+        }
+
+        .form-card h2 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 1.5em;
+        }
+
+        /* Input Group */
+        .input-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .input-group input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #6a5acd;
+            box-shadow: 0 0 5px rgba(106, 90, 205, 0.3);
+        } 
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .users-list {
+            margin-top: 30px;
+            background: var(--card-color);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .users-table th,
+        .users-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .users-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .users-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background-color: #e6fff2;
+            color: #00b366;
+        }
+
+        .status-inactive {
+            background-color: #ffe6e6;
+            color: #ff3333;
+        }
+
+        @media (max-width: 1024px) {
+            .user-management {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .users-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Admin Panel</h2>
+        </div>
+        <nav class="nav-links">
+            <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+            <a href="#">Manage Users</a>
+            <a href="{% url 'add_subjects' %}">Add Subjects</a>
+            <a href="{% url 'manage_subjects' %}">Manage Subjects</a>
+            <a href="{% url 'view_results' %}">View Results</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1>Manage Users</h1>
+            <p>Add, remove, or view student information</p>
+        </div>
+
+        <!-- Add Student Form -->
+        <h2>Add Student</h2>
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ add_form.as_p }}
+            <button type="submit" name="add_student" class="btn btn-primary">Add Student</button>
+        </form>
+
+        <hr>
+
+        <!-- Remove Student Form -->
+        <h2>Remove Student</h2>
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ remove_form.as_p }}
+            <button type="submit" name="remove_student" class="btn btn-danger">Remove Student</button>
+        </form>
+
+
+        <!-- List of Current Students -->
+        <div class="users-list">
+            <h2>Current Students</h2>
+            <div class="search-bar">
+                <input type="text" placeholder="Search students...">
+            </div>
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Username</th>
+                        <th>Age</th>
+                        <th>School</th>
+                        <th>Class</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{ student.student_id }}</td>
+                            <td>{{ student.username }}</td>
+                            <td>{{ student.age }}</td>
+                            <td>{{ student.school }}</td>
+                            <td>{{ student.class_name }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5">No students found</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        const searchInput = document.querySelector('.search-bar input');
+        const tableRows = document.querySelectorAll('.users-table tbody tr');
+    
+        searchInput.addEventListener('input', function() {
+            const query = searchInput.value.toLowerCase();
+            tableRows.forEach(row => {
+                const cells = row.getElementsByTagName('td');
+                let match = false;
+                for (let cell of cells) {
+                    if (cell.textContent.toLowerCase().includes(query)) {
+                    match = true;
+                    break;
+                }
+            }
+            row.style.display = match ? '' : 'none';
+            
+        });
+    });
+</script>
+</body>
+</html>

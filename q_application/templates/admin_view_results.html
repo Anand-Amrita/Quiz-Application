@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Results - Quiz App</title>
+    <link rel="stylesheet" href="templates\static\css\bootstrap.css">
+    <script src="templates\static\js\bootstrap.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --background-color: #f8f9fa;
+            --card-color: #ffffff;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --danger-color: #dc3545;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--background-color);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 250px;
+            background: var(--primary-color);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            z-index: 100;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .nav-links {
+            margin-top: 30px;
+        }
+
+        .nav-links a {
+            display: block;
+            padding: 15px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background:white;
+            color: rgb(2, 3, 80);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .header {
+            background: var(--card-color);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        /* Results Table */
+        .results-table-container {
+            background: var(--card-color);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .results-table-container h2 {
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .results-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .results-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .analysis-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .analysis-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Search Bar */
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+            width: 300px;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Admin Panel</h2>
+        </div>
+        <nav class="nav-links">
+            <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+            <a href="{% url 'manage_users' %}">Manage Users</a>
+            <a href="{% url 'add_subjects' %}">Add Subjects</a>
+            <a href="{% url 'manage_subjects' %}">Manage Subjects</a>
+            <a href="#">View Results</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1>View Results</h1>
+            <p>Review results of student quizzes</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <form method="GET" action="{% url 'view_results' %}">
+                <input type="text" name="q" placeholder="Search student..." value="{{ search_query }}">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <!-- Display Messages -->
+        {% if messages %}
+            <div>
+                {% for message in messages %}
+                    <div class="alert alert-info" style="margin-bottom: 10px;">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Results Table -->
+        <div class="results-table-container">
+            <h2>Quiz Results</h2>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Student ID</th>
+                        <th>Subject</th>
+                        <th>Quiz Type</th>
+                        <th>No. of Questions</th>
+                        <th>Correctly Answered</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                    <tr>
+                        <td>{{ result.user.username }}</td>
+                        <td>{{ result.user.student_id }}</td>
+                        <td>{{ result.subject.name }}</td>
+                        <td>{{ result.quiz_type|capfirst }}</td>
+                        <td>{{ result.total_questions }}</td>
+                        <td>{{ result.correct_answers }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7">No results found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

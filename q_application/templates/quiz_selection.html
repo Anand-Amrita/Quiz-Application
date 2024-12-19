@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Selection - Quiz App</title>
+    <link rel="stylesheet" href="templates\static\css\bootstrap.css">
+    <script src="templates\static\js\bootstrap.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --background-color: #f8f9fa;
+            --card-color: #ffffff;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --danger-color: #dc3545;
+        }
+    
+        body {
+            min-height: 100vh;
+            background-color: var(--background-color);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background: var(--primary-color);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            z-index: 100;
+            border-right: 1px solid var(--border-color);
+        }
+    
+        .sidebar-header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+    
+        .nav-links {
+            margin-top: 30px;
+        }
+    
+        .nav-links a {
+            display: block;
+            padding: 15px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+    
+        .nav-links a:hover {
+            background: white;
+            color: rgb(2, 3, 80);
+        }
+    
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+    
+        .header {
+            background: var(--card-color);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+    
+        .user-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+    
+        .dashboard-card {
+            background: var(--card-color);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+    
+        .dashboard-card h3 {
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+    
+        .dashboard-card p {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+    
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+    
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+    
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+        }
+    
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+    
+        @media (max-width: 1024px) {
+            .user-dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+    
+            .main-content {
+                margin-left: 0;
+            }
+    
+            .dashboard-card {
+                margin-bottom: 20px;
+            }
+        }
+    
+        .student-id {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+    
+        .quiz-selection-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+    
+        .carousel-card {
+            background: var(--card-color);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+        }
+    
+        .carousel-card img {
+            width: 100%;
+            height: 200px; /* You can adjust the height as per your requirement */
+            object-fit: cover; /* Ensures the image covers the entire area without distortion */
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+    
+        .carousel-card h3 {
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+    
+        .carousel-card p {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+    
+        .btn-warning {
+            background: var(--danger-color);
+            color: white;
+        }
+    
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+    
+        @media (max-width: 1024px) {
+            .quiz-selection-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    
+        @media (max-width: 768px) {
+            .quiz-selection-container {
+                grid-template-columns: 1fr;
+            }
+    
+            .sidebar {
+                transform: translateX(-100%);
+            }
+    
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    
+        .student-id {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        /* General Styling */
+        .subject-card {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out;
+        }
+
+        .subject-card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            border-bottom: none;
+        }
+
+        .card-title {
+            margin-left: 30px;
+            font-size: 1.4rem;
+        }
+        .card-small{
+            margin-left: 20px;
+            font-size: 1.0rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .quiz-icon i {
+            color: #6c63ff;
+        }
+
+        .form-select {
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .btn-success {
+            font-size: 1rem;
+            font-weight: bold;
+            background-color: #28a745;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        /* Page Header */
+        .main-content h1 {
+            font-size: 2.2rem;
+            color: #6c63ff;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .text-light{
+            margin-left:10px;
+        }
+    </style>
+    
+</head>
+<body>
+        <!-- Sidebar Section -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Student Panel</h2>
+            </div>
+            <nav class="nav-links">
+                <a href="{% url 'student_dashboard' %}">Dashboard</a>
+                <a href="#">Start Quiz</a>
+                <a href="{% url 'user_results' %}">Results</a>
+                <a href="{% url 'student_settings' %}" class="active">Settings</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            </nav>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="main-content text-center mb-4">
+                    <h1>Select a Quiz Subject</h1>
+                </div>
+            </div>
+    
+            <!-- Main Content Section -->
+            <div class="main-content">
+                <div class="row quiz-selection-container">
+                    {% for subject in subjects %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card subject-card shadow-sm border-0">
+                                <div class="card-header text-white text-center py-3" style="background-color: #6c63ff; border-radius: 10px 10px 0 0;">
+                                    <h5 class="card-title mb-0 font-weight-bold">{{ subject.name }}</h5>
+                                    <p class="card-small small mb-0">Ready to test your knowledge?</p>
+                                </div>
+                                <div class="card-body d-flex flex-column align-items-center">
+                                    <div class="quiz-icon mb-3">
+                                        <i class="fas fa-graduation-cap fa-3x" style="color: #6c63ff;"></i>
+                                    </div>
+                                    <div class="mb-3 w-100">
+                                        <label for="quiz-type-dropdown-{{ subject.id }}" class="form-label">Select Quiz Type</label>
+                                        <select id="quiz-type-dropdown-{{ subject.id }}" class="form-select text-center">
+                                            <option value="">-- Select --</option>
+                                            <option value="mcq">MCQ</option>
+                                            <option value="oneword">One-Word</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-success rounded-pill px-8 start-quiz-btn" data-subject-id="{{ subject.id }}">Start Quiz</button>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-12 text-center">
+                            <p>No subjects available for quizzes.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+   
+
+
+    <!-- JavaScript -->
+    <script>
+        // Add event listeners to all start quiz buttons
+        document.querySelectorAll('.start-quiz-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                // Get the selected subject ID and quiz type
+                var subjectId = this.getAttribute('data-subject-id');
+                var quizTypeDropdown = document.getElementById('quiz-type-dropdown-' + subjectId);
+                var quizType = quizTypeDropdown.value;
+
+                // Check if a quiz type is selected
+                if (!quizType) {
+                    alert('Please select a quiz type.');
+                } else {
+                    // Redirect to the quiz page with subject ID and quiz type as query parameters
+                    window.location.href = "{% url 'quiz_page' subject_id='0' %}".replace("0", subjectId) + "?quiz_type=" + quizType;
+                }
+            });
+        });
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="templates\static\js\bootstrap.js"></script>
+</body>
+
+
+</html>
